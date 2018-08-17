@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>观察者模式</title>
+</head>
+<body>
+    <script>
+        // 发布订阅模式：订阅消息，发布消息，退订消息
+        var observer = (function() {
+            var _message = {};  //_内置变量，保存订阅了的人
+            return {
+                // 订阅消息
+                regist: function(type, fn) {
+                    if(!_message[type]) {
+                        _message[type] = [fn];
+                    }else {
+                        _message[type].push(fn);
+                    }
+                },
+                // 发布消息，只向订阅了的人发布
+                fire: function(type, args) {
+                    if(!_message[type]) {
+                        return;
+                    }
+                    var events = {  // 
+                        type: type,
+                        args: args
+                    };
+                    _message[type].forEach(function(fn) {
+                        fn.call(this, events);
+                    })
+                },
+                // 退订消息，在订阅人登记组中删除传入对象
+                remove: function(type, fn) {
+                    if(_message[type] instanceof Array) {
+                        var i = _message[type].length - 1;
+                        for(; i >= 0; i--) {
+                            _message[type][i] === fn && _message[type].splice(i, 1);
+                        }
+                    }
+                }
+            }
+        })()    
+
+        
+        observer.regist('test', function(e) {
+            console.log(e.type, e.args.msg);
+        })
+        observer.regist('test', function(e) {
+            console.log(e.type, e.args.msg + ' w2');
+        })
+        observer.fire('test', {msg: 'hello'});
+        observer.fire('test2', {msg: 'hello2'})
+
+    </script>
+</body>
+</html>

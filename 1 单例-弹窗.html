@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .alert {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            border: 1px solid #eee;
+            text-align: center;
+            line-height: 300px;
+            color: #992277;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 100px;
+        }
+
+        .alert .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            color: #333;
+            text-align: center;
+            line-height: 20px;
+            font-weight: 300;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <button id="alertUp" style="width:'200px'">点我弹窗</button>
+        <!-- 行级元素 -->
+        <button id="iframeCreate">点我创建iframe</button>
+    </div>
+    <script>
+        // what is doing:点击时再创建弹窗等DOM元素，多次点击，只创建一次。
+
+        // 设计模式原则：单一职责原则
+        // 1.判断逻辑
+        var getSingle = function (fn) {
+            var result = null;
+            if (!result) {
+                result = fn.apply(this, arguments);
+            }
+            return function () {
+                return result;
+            }
+        }
+
+        // 2.创建dom逻辑
+        var createAlert = function () {
+            var obj = document.createElement('div');
+            obj.innerHTML = '我是一个弹窗';
+            obj.className = 'alert';
+            obj.style.display = 'none';
+            document.body.appendChild(obj);
+            return obj;
+        }
+        var createIframe = function () {
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            return iframe;
+        }
+        var createSingleAlert = getSingle(createAlert);
+        document.getElementById('alertUp').onclick = function () {
+            var alertBox = createSingleAlert();
+            alertBox.style.display = 'block';
+
+        }
+        var createSingleIframe = getSingle(createIframe);
+        document.getElementById('iframeCreate').onclick = function () {
+            var iframe = createSingleIframe();
+            iframe.src = 'http://www.baidu.com';
+            iframe.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

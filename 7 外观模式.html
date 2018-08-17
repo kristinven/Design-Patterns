@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>外观模式</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="clickme">点我点我</div>
+    </div>
+    <script>
+        // 外观模式：将几个不同的方法封装起来，统一调用
+        function myAddEvent(el, ev, fn) {
+            // DOM2 addEventListener
+            if(el.addEventListener) {
+                el.addEventListener(ev, fn, false);
+            // 不支持addEventListener,支持attchEvent
+            }else if(el.attachEvent) {
+                el.attachEvent('on'+ev, fn);
+            // 都不支持，DOM0方法
+            }else {
+                el['on' + ev] = fn;
+            }
+        }
+        var clickme = document.getElementById('clickme');
+        myAddEvent(clickme, 'click', function() {
+            console.log(111);
+        })
+    </script>
+</body>
+</html>

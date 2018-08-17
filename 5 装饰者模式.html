@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>装饰者模式</title>
+</head>
+<body>
+    <script>
+        // 电脑。增加：内存，光驱，保险
+        // 电脑
+        var Macbook = function() {
+            //关键数据，用函数形式返回值。设计模式：开闭原则--对修改数据关闭
+            this.cost = function() {  
+                return 1000;
+            }
+        }
+        // 内存
+        var Memory = function(computer) {
+            this.cost = function() {
+                return computer.cost() + 100;
+            }
+        }
+        // 光驱
+        var BluerayDriver = function(computer) {
+            this.cost = function() {
+                return computer.cost() + 200;
+            }
+        }
+        // 保险
+        var Insurance = function(computer) {
+            this.cost = function() {
+                return computer.cost() + 300;
+            }
+        }
+        var myMacbook = new Insurance(new BluerayDriver(new Memory(new Macbook())));
+        console.log(myMacbook.cost());  // 函数形式返回关键数据
+        var yourMacbook = new Memory(new BluerayDriver(new Macbook()))
+        console.log(yourMacbook.cost());
+    </script>
+</body>
+</html>

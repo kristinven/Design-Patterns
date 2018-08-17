@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 工厂模式  收束
+        // 造车
+        // 有个车厂
+        var carFactory = function() {}
+        // 三条生产线：宝马，奔驰，奥迪
+        carFactory.BMW = function() {
+            this.name = 'BMW';
+        }
+        carFactory.Benz = function() {
+            this.name = 'Benz';
+        }
+        carFactory.Audi = function() {
+            this.name = 'Audi';
+        }
+        // 自动驾驶
+        carFactory.prototype.autoDrive = function() {
+            console.log('该批次的' + this.name + '添加了自动驾驶功能。');
+        }
+        // 大灯清洗
+        carFactory.prototype.clearBulb = function() {
+            console.log('该批次的' + this.name + '添加了大灯清洗功能。');
+        }
+        // 安全气囊
+        carFactory.prototype.airBag = function() {
+            console.log('该批次的' + this.name + '添加了安全气囊功能。');
+        }
+        // 自动停车
+        carFactory.prototype.autoPark = function() {
+            console.log('该批次的' + this.name + '添加了自动停车功能。');
+        }
+        // 生产车  
+        // 收束 所有需要的功能
+        // 根据车型加不同功能：宝马--大灯清洗，奔驰--安全气囊，奥迪--自动停车
+        carFactory.create = function(name) {
+            if(typeof(carFactory[name]) !== 'function') {
+                console.log('对不起，此' + name + '车型生产不了。');
+                return;
+            }
+            // 统一功能：自动驾驶
+            if(typeof(carFactory[name].prototype.autoDrive) !== 'function') {
+                carFactory[name].prototype.autoDrive = carFactory.prototype.autoDrive;
+            }
+            // 根据车型配置不同功能
+            if(name === 'BMW') {
+                if(typeof(carFactory[name].prototype.clearBulb) !== 'function') {
+                    carFactory[name].prototype.clearBulb = carFactory.prototype.clearBulb;
+                }
+            }
+            if(name === 'Benz') {
+                if(typeof(carFactory[name].prototype.clearBulb) !== 'function') {
+                    carFactory[name].prototype.airBag = carFactory.prototype.airBag;
+                }
+            }
+            if(name === 'Audi') {
+                if(typeof(carFactory[name].prototype.autoPark) !== 'function') {
+                    carFactory[name].prototype.autoPark = carFactory.prototype.autoPark;
+                }
+            }
+
+            var car = new carFactory[name]();
+            return car;
+        }
+        
+        var bmw = carFactory.create('BMW');
+        bmw.autoDrive();
+        bmw.clearBulb();
+        var benz = carFactory.create('Benz');
+        benz.autoDrive();
+        benz.airBag();
+        var audi = carFactory.create('Audi');
+        audi.autoDrive();
+        audi.autoPark();
+        var ford = carFactory.create('Ford');
+
+
+
+
+    </script>
+</body>
+</html>

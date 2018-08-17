@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var Flower = function(name) {
+            this.name = name;
+        }
+        // 1.0版本：中介作用
+        /* var boy = {      // 男孩
+            sendFlower: function(target) {
+                var freshFlower = new Flower('向日葵');                
+                target.receiveFlower(freshFlower);
+            }
+        }
+        var deliveryMan = {     // 送花员
+            receiveFlower: function(flower) {
+                girl.receiveFlower(flower);   
+            }
+        }
+        var girl = {     //女孩
+            receiveFlower: function(flower) {
+                console.log('收到: ' + flower.name);
+            }
+        } */
+        // 2.0版本: 保护和中介作用
+        // 男孩
+        var boy = {
+            sendFlower: function (target) {
+                target.receiveFlower('玫瑰');
+            }
+        }
+        // 送花员
+        var deliveryMan = {
+            receiveFlower: function(flowerName) {
+                girl.receiveFlower(() => {
+                   return this.buyFlower(flowerName);
+                })
+            },
+            buyFlower: function(flowerName) {
+                var flower = new Flower(flowerName);
+                return flower;
+            }
+        }
+        //女孩
+        var girl = {
+            receiveFlower: function(fn) {
+                setTimeout(function() {
+                    var flower = fn();
+                    console.log('收到：' + flower.name);
+                }, 1000);
+            }
+        }
+        boy.sendFlower(deliveryMan);
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>迭代器模式</title>
+</head>
+<body>
+    <script>
+        // 迭代器模式
+        var agg = (function(){
+            var arr = [1,2,3,4,5];
+            var length = arr.length;
+            var index = 0;
+            return {
+                next: function() {
+                    var element;
+                    if(!this.hasNext()) {
+                        return null;
+                    }
+                    element = arr[index];
+                    index++;
+                    return element;
+                },
+                hasNext: function() {
+                    return index < length;
+                },
+                current: function() {
+                    return arr[index];
+                }
+            }
+        })(); 
+        
+        // 外界通过指定接口访问集合内部数据。但不暴露集合内部数据的结构。
+        // 面向对象方式访问，可适用于更加复杂的数据结构。
+        while(agg.hasNext()) {
+            console.log(agg.next());
+        }
+        console.log(agg.next());
+        console.log(agg.current());
+        
+    </script>
+</body>
+</html>
